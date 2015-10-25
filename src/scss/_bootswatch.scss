@@ -23,7 +23,7 @@ $web-font-path: "https://fonts.googleapis.com/css?family=Open+Sans:300italic,400
 
   &-collapse {
     border-top-color: $dropdown-divider-bg;
-    @include box-shadow(none);
+    // @include box-shadow(none);
   }
 
   .btn {
@@ -393,7 +393,7 @@ input[type="checkbox"] {
   padding: 2px;
   background-color: #f6f6f6;
   border: 1px solid #ccc;
-  @include box-shadow(none);
+  // @include box-shadow(none);
 }
 
 // Containers =================================================================

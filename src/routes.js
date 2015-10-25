@@ -11,13 +11,11 @@ export default function routes(store) {
     }
   };
 
-  return (<Route path="/" component={App}>
-    <Route path="/login" component={Login} />
-
-    <Route onEnter={ requireLogin } >
+  return (<Route name="app" component={App}>
+    <Route path="login" name="login" component={Login} />
+    <Route onEnter={ requireLogin } path="/">
       <Route path="dashboard" component={ Dashboard } />
     </Route>
-
-    <Route path="*" component={NotFound} />
+    <Route path="*" component={NotFound} />);
   </Route>);
 }

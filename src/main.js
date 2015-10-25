@@ -7,7 +7,7 @@ import configureStore from './store/configureStore';
 import * as authActions from './actions/auth';
 import routes from './routes';
 import DevTools from './components/DevTools';
-
+import $ from 'jquery';
 
 const initialState = { auth: { token: null } };
 export const store = configureStore(initialState);

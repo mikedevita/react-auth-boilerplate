@@ -5,7 +5,7 @@ import { pushState } from 'redux-router';
 import * as authActions from '../actions/auth';
 
 @connect(
-  state => ({ auth: state.auth, isLoggedIn: !!state.auth.token }),
+  state => ({ _this: this, auth: state.auth, isLoggedIn: !!state.auth.token }),
   { pushState }
 )
 export default class App extends React.Component {
@@ -41,17 +41,8 @@ export default class App extends React.Component {
 
   render() {
     const { isLoggedIn, children } = this.props;
-
     return (
       <div className="App">
-        <nav>
-          <ul>
-            <li><Link to="/">Home</Link></li>
-            <li><Link to="/dashboard">Dashboard</Link></li>
-            { !isLoggedIn && <li><Link to="/login">Login</Link></li> }
-            { isLoggedIn && <li><a href="/logout" onClick={ this.onLogout }>Logout</a></li> }
-          </ul>
-        </nav>
         <div className="container">{ children }</div>
       </div>
     );

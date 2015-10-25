@@ -1,5 +1,17 @@
 import 'isomorphic-fetch';
-import { Auth } from '../constants';
+import { Auth, App } from '../constants';
+import Api from '../middleware/api';
+
+
+const payload = { username: 'mhdevita', password: '^hhFV16S!'};
+Api.Auth.login(payload)
+.then(function(response){
+  console.log(response);
+})
+.catch(function(error){
+  console.error(error);
+});
+
 
 export function load() {
   return dispatch => {

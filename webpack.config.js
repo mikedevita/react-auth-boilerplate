@@ -15,6 +15,12 @@ module.exports = {
     filename: 'app.js',
     publicPath: '/assets/'
   },
+  node: {
+    console: true,
+    fs: 'empty',
+    net: 'empty',
+    tls: 'empty'
+  },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),
@@ -23,12 +29,15 @@ module.exports = {
       __DEV_TOOLS__: JSON.stringify(JSON.parse(process.env.DEV_TOOLS || 'false'))
     }),
     new HtmlWebpackPlugin({
-      title: 'Redux Boilerplate',
+      title: 'SAP Infrastructure',
       filename: 'index.html',
       template: 'index.template.html'
     })
   ],
   module: {
+    preLoaders: [
+      { test: /\.json$/, loader: 'json'},
+    ],
     loaders: [
       { test: /bootstrap-sass\/assets\/javascripts\//, loader: 'imports?jQuery=jquery' },
       { test: /\.scss$/, loader: 'style!css!sass?outputStyle=expanded' },

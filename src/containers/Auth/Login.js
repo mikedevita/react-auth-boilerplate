@@ -44,7 +44,7 @@ export default class Login extends Component {
             <input id="password" ref="password" name="password" placeholder="Password" type="password" className="form-control input-lg" required/>
           </div>
           <div className="form-group text-center">
-            <input type="submit" className="btn btn-success btn-lg btn-block" value="Login" />
+            <input type="submit" className="btn btn-primary btn-lg btn-block" value="Login" />
           </div>
         </form>
       </div>
