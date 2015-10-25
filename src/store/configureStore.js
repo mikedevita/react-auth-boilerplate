@@ -1,47 +1,48 @@
-import rootReducer from '../reducers/index';
-import { applyMiddleware, createStore, compose } from 'redux';
-import logger from '../middleware/logger';
-import thunk from 'redux-thunk';
-import { devTools, persistState } from 'redux-devtools';
+import { createStore, compose, applyMiddleware } from 'redux';
 import { reduxReactRouter } from 'redux-router';
-import { createHistory } from 'history';
-import React from 'react';
-import { Route } from 'react-router';
-import HelloWorld from '../components/HelloWorld';
-import DevTools from '../components/DevTools';
+import thunk from 'redux-thunk';
+import createLogger from 'redux-logger';
+import createHistory from 'history/lib/createBrowserHistory';
+import rootReducer from '../reducers';
 
-const routes = (
-  <Route path="/" component={HelloWorld} />
-);
+const middleware = [
+  thunk,
+  createLogger({ collapsed: true })
+];
+
+const storeEnhancers = [
+  reduxReactRouter({ createHistory }) // routes?
+];
 
 let finalCreateStore;
 
 if (__DEV_TOOLS__) {
+  const { persistState } = require('redux-devtools');
+  const DevTools = require('../components/DevTools');
+
   finalCreateStore = compose(
-    applyMiddleware(logger, thunk),
-    reduxReactRouter({routes, createHistory}),
+    applyMiddleware(...middleware),
+    ...storeEnhancers,
     DevTools.instrument(),
-    persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/)),
+    persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/))
   )(createStore);
 } else {
   finalCreateStore = compose(
-    applyMiddleware(logger, thunk),
-    reduxReactRouter({routes, createHistory})
+    applyMiddleware(...middleware),
+    ...storeEnhancers
   )(createStore);
 }
 
-const configureStore = () => {
-  const store = finalCreateStore(rootReducer);
+export default function configureStore(initialState) {
+  const store = finalCreateStore(rootReducer, initialState);
 
   if (module.hot) {
     // Enable Webpack hot module replacement for reducers
     module.hot.accept('../reducers', () => {
-      const nextRootReducer = require('../reducers/index');
+      const nextRootReducer = require('../reducers');
       store.replaceReducer(nextRootReducer);
     });
   }
 
   return store;
 };
-
-export default configureStore;

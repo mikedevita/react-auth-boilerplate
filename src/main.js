@@ -2,24 +2,40 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { ReduxRouter } from 'redux-router';
+
 import configureStore from './store/configureStore';
-import { createDevTools } from 'redux-devtools';
-import LogMonitor from 'redux-devtools-log-monitor';
-import DockMonitor from 'redux-devtools-dock-monitor';
+import * as authActions from './actions/auth';
+import routes from './routes';
 import DevTools from './components/DevTools';
 
-const store = configureStore();
 
-ReactDOM.render(
-  <div>
-    <Provider store={store}>
+const initialState = { auth: { token: null } };
+export const store = configureStore(initialState);
+const component = <ReduxRouter routes={ routes(store) } />;
+const target = document.getElementById('app');
+
+store.dispatch(authActions.load());
+if (__DEV_TOOLS__) {
+  ReactDOM.render(
+    <Provider store={ store }>
       <div>
-        <ReduxRouter />
+        { component }
         {__DEV_TOOLS__ ?
-          <DevTools /> : null
-        }
+           <DevTools /> : null
+         }
       </div>
-    </Provider>
-  </div>,
-  document.getElementById('app')
-);
+    </Provider>,
+    target
+  );
+} else {
+  ReactDOM.render(
+    <Provider store={ store }>
+      { component }
+    </Provider>,
+    target
+  );
+}
+
+if (process.env.NODE_ENV !== 'production') {
+  window.React = React; // Enable react devtools
+}

@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
-import helloWorld from './helloWorld';
-import { routerStateReducer as router } from 'redux-router';
+import { routerStateReducer } from 'redux-router';
+import { default as auth } from './auth';
 
 const rootReducer = combineReducers({
-  router,
-  helloWorld
+  router: routerStateReducer,
+  auth
 });
 
 export default rootReducer;
