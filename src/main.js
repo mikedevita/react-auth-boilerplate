@@ -4,17 +4,16 @@ import { Provider } from 'react-redux';
 import { ReduxRouter } from 'redux-router';
 
 import configureStore from './store/configureStore';
-import * as authActions from './actions/auth';
+import Actions from './actions';
 import routes from './routes';
 import DevTools from './components/DevTools';
-import $ from 'jquery';
 
 const initialState = { auth: { token: null } };
 export const store = configureStore(initialState);
 const component = <ReduxRouter routes={ routes(store) } />;
 const target = document.getElementById('app');
 
-store.dispatch(authActions.load());
+store.dispatch(Actions.auth.load());
 if (__DEV_TOOLS__) {
   ReactDOM.render(
     <Provider store={ store }>

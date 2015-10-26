@@ -2,13 +2,13 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { pushState } from 'redux-router'
 import { bindActionCreators } from 'redux';
-import * as authActions from '../actions/auth';
 
+import Actions from '../actions';
 import Header from './Header';
 import Sidebar from './Sidebar';
 
 @connect(
-  state => ({ auth: state.auth, isLoggedIn: !!state.auth.token }),
+  state => ({ notificaton: state.notification, auth: state.auth, isLoggedIn: !!state.auth.token }),
   { pushState }
 )
 export default class App extends React.Component {
@@ -35,7 +35,7 @@ export default class App extends React.Component {
     return (<div className="App">
       <Header
         router={getState().router}
-        {...bindActionCreators({ logout: authActions.logout }, dispatch)}
+        {...bindActionCreators({ logout: Actions.auth.logout }, dispatch)}
       />
       <div className="app-container container-fluid">
         <div className="col-sm-3 col-md-2 sidebar">

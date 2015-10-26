@@ -3,6 +3,7 @@ import App from './App';
 import Login from './Auth/Login';
 import NotFound from './NotFound';
 import Dashboard from './Dashboard/Dashboard';
+import User from './Admin/User';
 import Test from './Test';
 
 export default {
@@ -11,5 +12,6 @@ export default {
   Login,
   Dashboard,
   Test,
-  NotFound
+  NotFound,
+  User
 };

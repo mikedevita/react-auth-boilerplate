@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import * as appActions from '../../actions/app';
+import Actions from '../../actions';
 
 export default class Dashboard extends Component {
 
@@ -13,7 +13,7 @@ export default class Dashboard extends Component {
 
   componentDidMount() {
     const { dispatch } = this.context.store;
-    dispatch(appActions.getDashboardStats());
+    dispatch(Actions.app.getDashboardStats());
   }
 
   render() {

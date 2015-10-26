@@ -1,18 +1,23 @@
 import createReducer from '../util/createReducer';
-import { App } from '../constants';
+import { Notification } from '../constants';
 
 const initialState = {};
 
-function addNotification(state, action) {
+function emitNotification(state, action) {
   const nextState = {
     ...state,
     level: action.level,
     message: action.message
   };
-  console.debug(nextState);
+  return nextState;
+}
+
+function clearNotification(state, action) {
+  const nextState = {};
   return nextState;
 }
 
 export default createReducer(initialState, {
-  [App.EMIT_NOTIFICATION]: addNotification
+  [Notification.EMIT_NOTIFICATION]: emitNotification,
+  [Notification.NOTIFICATION_EMITTED]: clearNotification
 });

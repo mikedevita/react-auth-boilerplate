@@ -17,33 +17,23 @@ export default class Navigation extends React.Component {
 
   render() {
     const { user, router, currentRoute, appName } = this.props;
-    var navitems = lodash.find(router.routes, { navRoute: 'true' }).childRoutes;
-    var NavItems = navitems.map(function routeIteration(route, index) {
-      const active = (currentRoute.pathname === route.path) ? 'active' : null;
-      return (<NavItem
-        key={index}
-        eventKey={index}
-        href={route.path}
-        className={active}
-        >
-          {route.name}
-      </NavItem>);
-    });
-
     return (<Navbar fixedTop fluid>
       <NavBrand>{appName}</NavBrand>
       <Nav>
-        {NavItems}
+        <NavItem href="/" className={(currentRoute.pathname === '/' ? 'active' : null)}>Home</NavItem>
+        <NavItem href="/test" className={(currentRoute.pathname === '/test' ? 'active' : null)}>Test</NavItem>
       </Nav>
+
       <Nav right>
-        <NavDropdown eventKey={1} title={'Hey There ' + user.firstName} id="nav-profile-dropdown">
-          <MenuItem eventKey="1">Action</MenuItem>
-          <MenuItem eventKey="2">Aother action</MenuItem>
-          <MenuItem eventKey="3">Something else here</MenuItem>
+        {user.accessLevel >= 2 &&
+          <NavItem href="/user" className={(currentRoute.pathname === '/user' ? 'active' : null)}>Users</NavItem>
+        }
+        <NavDropdown eventKey={2} title={'Hey There ' + user.firstName} id="nav-profile-dropdown">
+          <MenuItem eventKey="1" href="/profile">Profile</MenuItem>
           <MenuItem divider />
           <MenuItem eventKey="4">Separated link</MenuItem>
         </NavDropdown>
-        <NavItem eventKey={2} onClick={this.props.logout}>Logout</NavItem>
+        <NavItem eventKey={3} onClick={this.props.logout}>Logout</NavItem>
       </Nav>
     </Navbar>);
   }

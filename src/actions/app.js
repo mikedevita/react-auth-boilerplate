@@ -1,16 +1,21 @@
 import 'isomorphic-fetch';
-import { App } from '../constants';
-import Api from '../middleware/api';
+import { User, App, Notification } from '../constants';
+import { Api } from '../middleware/api/index';
 
-export function getDashboardStats() {
-  return dispatch => {
-    dispatch({ type: App.GET_DASHBOARD_STATS });
-    Api.Dashboard.stats()
+export function fetchUsers() {
+  return (dispatch, getState) => {
+    const { token } = getState().auth;
+
+    dispatch({ type: User.GET_USERS });
+
+    Api.User.findAll(token)
     .then((response) => {
-      dispatch({ type: App.GOT_DASHBOARD_STATS, stats: response });
+      console.debug(response);
+      dispatch({ type: User.GOT_USERS, users: response });
     })
-    .catch((error) => {
-      dispatch({ type: App.GENERAL_ERROR, notification: error });
+    .catch((response) => {
+      console.error(response);
+      dispatch({ type: Notification.EMIT_NOTIFICATION, level: 'error', message: response.error.msg });
     });
   };
 }

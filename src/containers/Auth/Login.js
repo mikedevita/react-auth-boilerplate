@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import * as authActions from '../../actions/auth';
+import Actions from '../../actions';
 import { App } from '../../constants';
 
 @connect(state => ({ auth: state.auth }))
@@ -32,7 +32,7 @@ export default class Login extends Component {
       password: this.refs.password.value,
       loginType: this.state.loginType.toLowerCase()
     };
-    dispatch(authActions.login(data));
+    dispatch(Actions.auth.login(data));
   }
 
   handleLoginType(event) {
@@ -59,20 +59,22 @@ export default class Login extends Component {
           </div>
           <div className="form-group">
             <div className="btn-group">
-              <a
+              <button
+                type="button"
                 className={(this.state.loginType === 'LDAP') ? 'btn btn-success active' : 'btn btn-info'}
                 value="LDAP"
                 onClick={this.handleLoginType}
               >
               LDAP
-              </a>
-              <a
+              </button>
+              <button
+                type="button"
                 className={(this.state.loginType === 'LOCAL') ? 'btn btn-success  active' : 'btn btn-info'}
                 value="LOCAL"
                 onClick={this.handleLoginType}
               >
               Local
-              </a>
+              </button>
             </div>
           </div>
           <div className="form-group text-center">

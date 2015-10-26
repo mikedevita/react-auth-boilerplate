@@ -1,6 +1,6 @@
 import 'isomorphic-fetch';
-import { Auth, App } from '../constants';
-import Api from '../middleware/api';
+import { Auth, App, Notification } from '../constants';
+import Api from '../middleware/api/index';
 
 
 function decodeToken(token) {
@@ -25,14 +25,13 @@ export function login(data) {
     dispatch({ type: Auth.LOGIN, payload: data });
     Api.Auth.login({ identity: data.identity, password: data.password, loginType: data.loginType })
     .then((response) => {
-      console.debug(response);
       window.localStorage.setItem('token', response.token);
       const user = decodeToken(response.token);
       dispatch({ type: Auth.LOGIN_SUCCESS, user: user, token: response.token });
     })
     .catch((error) => {
       dispatch({ type: Auth.LOGIN_FAILURE, error: error });
-      dispatch({ type: App.EMIT_NOTIFICATION, level: error.level, message: error.message });
+      dispatch({ type: Notification.EMIT_NOTIFICATION, level: error.level, message: error.message });
     });
   };
 }

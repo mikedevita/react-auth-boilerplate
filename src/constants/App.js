@@ -3,7 +3,6 @@ export const API_VERSION = 'v1';
 export const APP_NAME = 'SAP Infrastructure';
 export const DEFAULT_LOGIN_TYPE = 'LOCAL';
 
-export const EMIT_NOTIFICATION = 'EMIT_NOTIFICATION';
 export const GET_DASHBOARD_STATS = 'GET_DASHBOARD_STATS';
 export const GOT_DASHBOARD_STATS = 'GOT_DASHBOARD_STATS';
 export const STATUS_CODES = {
