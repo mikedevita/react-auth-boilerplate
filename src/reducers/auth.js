@@ -3,13 +3,15 @@ import createReducer from '../util/createReducer';
 import { Auth } from '../constants';
 
 const initialState = {
-  token: null
+  token: null,
+  user: null
 };
 
 function onLoadAuthSuccess(state, action) {
   return {
     ...state,
-    token: action.payload.token
+    user: action.user,
+    token: action.token
   };
 }
 
@@ -24,7 +26,8 @@ function onLoginSuccess(state, action) {
   return {
     ...state,
     isLoggingIn: false,
-    token: action.payload.token,
+    user: action.user,
+    token: action.token,
     error: null
   };
 }
@@ -34,6 +37,7 @@ function onLoginFailure(state, action) {
     ...state,
     isLoggingIn: false,
     token: null,
+    user: null,
     error: action.error
   };
 }
@@ -41,7 +45,8 @@ function onLoginFailure(state, action) {
 function onLogout(state, action) {
   return {
     ...state,
-    token: null
+    token: null,
+    user: null
   };
 }
 

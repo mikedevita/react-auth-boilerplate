@@ -1,49 +1,34 @@
 import 'isomorphic-fetch';
-import { Auth, App } from '../constants';
+import { Auth } from '../constants';
 import Api from '../middleware/api';
 
 
-const payload = { username: 'mhdevita', password: '^hhFV16S!'};
-Api.Auth.login(payload)
-.then(function(response){
-  console.log(response);
-})
-.catch(function(error){
-  console.error(error);
-});
-
+function decodeToken(token) {
+  var base64Url = token.split('.')[1];
+  var base64 = base64Url.replace('-', '+').replace('_', '/');
+  var object = window.atob(base64);
+  return JSON.parse(object);
+}
 
 export function load() {
   return dispatch => {
     const token = window.localStorage.getItem('token');
-    dispatch({ type: Auth.LOAD_AUTH_SUCCESS, payload: { token } });
+    const user = decodeToken(token);
+    dispatch({ type: Auth.LOAD_AUTH_SUCCESS, user: user, token: token });
   };
 }
 
 export function login(data) {
   return dispatch => {
     dispatch({ type: Auth.LOGIN, payload: data });
-
-    fetch('/api/sessions', {
-      method: 'post',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    })
+    Api.Auth.login({ identity: data.identity, password: data.password })
     .then((response) => {
-      if (!response.ok) {
-        throw new Error(response.statusText);
-      }
-      return response.text();
+      window.localStorage.setItem('token', response.token);
+      const user = decodeToken(response.token);
+      dispatch({ type: Auth.LOGIN_SUCCESS, user: user, token: response.token });
     })
-    .then((token) => {
-      window.localStorage.setItem('token', token);
-      dispatch({ type: Auth.LOGIN_SUCCESS, payload: { token } });
-    })
-    .catch((err) => {
-      dispatch({ type: Auth.LOGIN_FAILURE, error: err.message });
+    .catch((error) => {
+      dispatch({ type: Auth.LOGIN_FAILURE, error: error.message });
     });
   };
 }

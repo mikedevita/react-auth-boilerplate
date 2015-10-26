@@ -22,18 +22,18 @@ function _buildUrl(path, params) {
 }
 
 const Auth = {
-  login: function login(data, params) {
-    return new Promise(function(resolve, reject){
-      const loginType = data.loginType || 'ldap';
+  login: function login(data) {
+    return new Promise(function loginPromise(resolve, reject) {
+      const loginType = data.loginType || 'local';
       return io.socket.post(
         _buildUrl('/auth/' + loginType),
         {
-          username: data.username,
+          username: data.identity,
           password: data.password
         },
         function gotLoginResults(body, JWR) {
-          if (JWR.statusCode !== 2001) {
-            return reject(body);
+          if (JWR.statusCode !== 200) {
+            return reject({ error: App.STATUS_CODES[JWR.statusCode], raw: JWR });
           }
 
           return resolve(body);
@@ -42,6 +42,23 @@ const Auth = {
   }
 };
 
+const Dashboard = {
+  stats: function stats(params = { sort: 'id DESC', limit: 100 }) {
+    return new Promise(function loginPromise(resolve, reject) {
+      return io.socket.get(
+        _buildUrl('/dashboard/stats'),
+        params,
+        function gotStats(body, JWR) {
+          if (JWR.statusCode !== 200) {
+            return reject({ error: App.STATUS_CODES[JWR.statusCode], raw: JWR });
+          }
+          return resolve(body);
+        });
+    });
+  }
+};
+
 export default {
-  Auth
+  Auth,
+  Dashboard
 };

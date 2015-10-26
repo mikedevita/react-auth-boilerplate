@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route } from 'react-router';
 
-import { App, Login, Dashboard, NotFound } from './containers';
+import { Root, App, Login, Dashboard, Test, NotFound } from './containers';
 
 export default function routes(store) {
   const requireLogin = (nextState, replaceState) => {
@@ -11,10 +11,11 @@ export default function routes(store) {
     }
   };
 
-  return (<Route name="app" component={App}>
+  return (<Route name="root" component={Root}>
     <Route path="login" name="login" component={Login} />
-    <Route onEnter={ requireLogin } path="/">
-      <Route path="dashboard" component={ Dashboard } />
+    <Route name="App" navRoute="true" component={App} onEnter={ requireLogin }>
+      <Route name="Home" path="/" component={ Dashboard } />
+      <Route name="Test" path="/test" component={ Test } />
     </Route>
     <Route path="*" component={NotFound} />);
   </Route>);

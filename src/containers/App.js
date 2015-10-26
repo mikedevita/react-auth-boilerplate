@@ -1,20 +1,25 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
-import { pushState } from 'redux-router';
+import { pushState } from 'redux-router'
+import { bindActionCreators } from 'redux';
 import * as authActions from '../actions/auth';
 
+import Header from './Header';
+import Sidebar from './Sidebar';
+
 @connect(
-  state => ({ _this: this, auth: state.auth, isLoggedIn: !!state.auth.token }),
+  state => ({ auth: state.auth, isLoggedIn: !!state.auth.token }),
   { pushState }
 )
 export default class App extends React.Component {
+
   static propTypes = {
     auth: PropTypes.object.isRequired,
-    children: PropTypes.any,
     isLoggedIn: PropTypes.bool.isRequired,
-    pushState: PropTypes.func.isRequired
-  };
+    children: PropTypes.any,
+    pushState: PropTypes.func.isRequired,
+    error: PropTypes.string
+  }
 
   static contextTypes = {
     store: PropTypes.any
@@ -22,33 +27,24 @@ export default class App extends React.Component {
 
   constructor(props, context) {
     super(props, context);
-    this.onLogout = this.onLogout.bind(this);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (!this.props.auth.token && nextProps.auth.token) {
-      this.props.pushState(null, '/account'); // login
-    } else if (this.props.auth.token && !nextProps.auth.token) {
-      this.props.pushState(null, '/'); // logout
-    }
-  }
-
-  onLogout(event) {
-    event.preventDefault();
-    const { dispatch } = this.context.store;
-    dispatch(authActions.logout());
   }
 
   render() {
-    const { isLoggedIn, children } = this.props;
-    return (
-      <div className="App">
-        <div className="container">{ children }</div>
+    const { children } = this.props;
+    const { dispatch, getState } = this.context.store;
+    return (<div className="App">
+      <Header
+        router={getState().router}
+        {...bindActionCreators({ logout: authActions.logout }, dispatch)}
+      />
+      <div className="app-container container-fluid">
+        <div className="col-sm-3 col-md-2 sidebar">
+          <Sidebar />
+        </div>
+        <div className="col-sm-9 col-sm-offset-2 col-md-10">
+          {children}
+        </div>
       </div>
-    );
+    </div>);
   }
 }
-
-App.propTypes = {
-
-};
