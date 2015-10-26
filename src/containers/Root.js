@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { pushState } from 'redux-router';
+import lodash from 'lodash';
 import NotificationSystem from 'react-notification-system';
 
 @connect(
@@ -17,6 +18,7 @@ export default class Root extends React.Component {
   constructor(props, context) {
     super(props, context);
     this._notificationSystem = null;
+
   }
 
   componentDidMount() {
@@ -30,11 +32,12 @@ export default class Root extends React.Component {
       this.props.pushState(null, '/login'); // logout
     }
 
-    if (nextProps.notification) {
+    if (!lodash.isEmpty(nextProps.notification)) {
       this._notificationSystem.addNotification({
-        message: nextProps.notification.message,
-        level: nextProps.notification.level
+        level: nextProps.notification.level,
+        message: nextProps.notification.message
       });
+      this.props.notification = {};
     }
   }
 

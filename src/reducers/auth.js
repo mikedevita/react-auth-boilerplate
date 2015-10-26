@@ -37,8 +37,7 @@ function onLoginFailure(state, action) {
     ...state,
     isLoggingIn: false,
     token: null,
-    user: null,
-    error: action.error
+    user: null
   };
 }
 

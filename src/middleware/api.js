@@ -24,7 +24,7 @@ function _buildUrl(path, params) {
 const Auth = {
   login: function login(data) {
     return new Promise(function loginPromise(resolve, reject) {
-      const loginType = data.loginType || 'local';
+      const loginType = data.loginType || App.DEFAULT_LOGIN_TYPE.toLowerCase();
       return io.socket.post(
         _buildUrl('/auth/' + loginType),
         {
@@ -33,7 +33,7 @@ const Auth = {
         },
         function gotLoginResults(body, JWR) {
           if (JWR.statusCode !== 200) {
-            return reject({ error: App.STATUS_CODES[JWR.statusCode], raw: JWR });
+            return reject({ level: body.type.toLowerCase(), message: body.msg, raw: JWR });
           }
 
           return resolve(body);

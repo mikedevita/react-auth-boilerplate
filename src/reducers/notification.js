@@ -4,9 +4,15 @@ import { App } from '../constants';
 const initialState = {};
 
 function addNotification(state, action) {
-  return Object.assign({}, action.notification.error, { raw: action.notification.raw});
+  const nextState = {
+    ...state,
+    level: action.level,
+    message: action.message
+  };
+  console.debug(nextState);
+  return nextState;
 }
 
 export default createReducer(initialState, {
-  [App.GENERAL_ERROR]: addNotification
+  [App.EMIT_NOTIFICATION]: addNotification
 });

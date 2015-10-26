@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+
 import * as authActions from '../../actions/auth';
+import { App } from '../../constants';
 
 @connect(state => ({ auth: state.auth }))
 export default class Login extends Component {
@@ -15,6 +17,11 @@ export default class Login extends Component {
   constructor(props, context) {
     super(props, context);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleLoginType = this.handleLoginType.bind(this);
+
+    this.state = {
+      loginType: App.DEFAULT_LOGIN_TYPE
+    };
   }
 
   handleSubmit(event) {
@@ -22,14 +29,21 @@ export default class Login extends Component {
     const { dispatch } = this.context.store;
     const data = {
       identity: this.refs.identity.value,
-      password: this.refs.password.value
+      password: this.refs.password.value,
+      loginType: this.state.loginType.toLowerCase()
     };
     dispatch(authActions.login(data));
   }
 
+  handleLoginType(event) {
+    event.preventDefault();
+    this.setState({
+      loginType: event.target.value
+    });
+  }
+
   render() {
     const { auth } = this.props;
-
     return (<div className="col-sm-offset-3 col-md-offset-3 col-lg-offset-3 col-sm-6 col-md-6 col-lg-6">
       <div className="well login-box">
         <form className="form" name="loginForm" onSubmit={ this.handleSubmit }>
@@ -42,6 +56,24 @@ export default class Login extends Component {
           <div className="form-group">
             <label htmlFor="password">Password</label>
             <input id="password" ref="password" name="password" placeholder="Password" type="password" className="form-control input-lg" required/>
+          </div>
+          <div className="form-group">
+            <div className="btn-group">
+              <a
+                className={(this.state.loginType === 'LDAP') ? 'btn btn-success active' : 'btn btn-info'}
+                value="LDAP"
+                onClick={this.handleLoginType}
+              >
+              LDAP
+              </a>
+              <a
+                className={(this.state.loginType === 'LOCAL') ? 'btn btn-success  active' : 'btn btn-info'}
+                value="LOCAL"
+                onClick={this.handleLoginType}
+              >
+              Local
+              </a>
+            </div>
           </div>
           <div className="form-group text-center">
             <input type="submit" className="btn btn-primary btn-lg btn-block" value="Login" />
